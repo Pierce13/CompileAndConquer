@@ -11,6 +11,8 @@ class Map {
 public:
     static const int WIDTH = 50;
     static const int HEIGHT = 25;
+    int stairsX = -1;
+    int stairsY = -1;
 
     Map();
     void render(int playerX, int playerY) const;

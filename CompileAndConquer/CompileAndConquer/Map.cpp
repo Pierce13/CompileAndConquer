@@ -25,10 +25,24 @@ Map::Map() {
 }
 
 void Map::render(int playerX, int playerY) const {
+    bool stairsRevealed = false;
     for (int y = 0; y < HEIGHT; ++y) {
         for (int x = 0; x < WIDTH; ++x) {
             if (x == playerX && y == playerY)
                 std::cout << tileToChar(TileType::Player);
+            else if (x == stairsX && y == stairsY) {
+                // Calculate Euclidean distance to stairs
+                double distance = std::sqrt(std::pow(playerX - stairsX, 2) + std::pow(playerY - stairsY, 2));
+                if (!stairsRevealed) {
+                    if (distance <= 6) {
+                        std::cout << tileToChar(TileType::Stairs);  // Show stairs if within 6-tile radius
+                        stairsRevealed = true;
+                    }
+                    else {
+                        std::cout << tileToChar(TileType::Floor);  // Keep stairs hidden otherwise
+                    }
+                }
+            }
             else
                 std::cout << tileToChar(grid[y][x]);
         }
@@ -113,9 +127,9 @@ Position Map::generateLevel() {
 
     // Place stairs at the farthest point
     if (!rooms.empty()) {
-        int sx = rooms.back().centerX();
-        int sy = rooms.back().centerY();
-        grid[sy][sx] = TileType::Stairs;
+        stairsX = rooms.back().centerX();
+        stairsY = rooms.back().centerY();
+        grid[stairsY][stairsX] = TileType::Stairs;
     }
 
     // If no valid position found, use a fallback
@@ -126,13 +140,5 @@ Position Map::generateLevel() {
     return playerPosition;
 }
 
-void Map::resetLevel() {
-    // Reset the grid to walls and regenerate level
-    for (int y = 0; y < HEIGHT; ++y) {
-        for (int x = 0; x < WIDTH; ++x) {
-            grid[y][x] = TileType::Wall;
-        }
-    }
-    generateLevel(); // Regenerate the level with new rooms
-}
+
 
