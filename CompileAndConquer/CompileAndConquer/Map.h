@@ -1,6 +1,7 @@
 #pragma once
 #include "Tile.h"
 #include <vector>
+#include <string>
 
 struct Position {
     int x, y;
@@ -15,7 +16,7 @@ public:
     int stairsY = -1;
 
     Map();
-    void render(int playerX, int playerY) const;
+    void render(int playerX, int playerY, const std::string& playerName, int levelNumber) const;
     bool isWalkable(int x, int y) const;
     Position generateLevel();
     void resetLevel();
