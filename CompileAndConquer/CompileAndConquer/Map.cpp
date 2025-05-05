@@ -24,8 +24,7 @@ Map::Map() {
     generateLevel();
 }
 
-void Map::render(int playerX, int playerY, const std::string& playerName, int levelNumber) const {
-    bool stairsRevealed = false;
+void Map::render(int playerX, int playerY, const std::string& playerName, int levelNumber, int playerHP, int playerMaxHP) {
 
     for (int y = 0; y < HEIGHT; ++y) {
         for (int x = 0; x < WIDTH; ++x) {
@@ -34,20 +33,21 @@ void Map::render(int playerX, int playerY, const std::string& playerName, int le
             else if (x == stairsX && y == stairsY) {
                 double distance = std::sqrt(std::pow(playerX - stairsX, 2) + std::pow(playerY - stairsY, 2));
                 if (!stairsRevealed) {
-                    if (distance <= 6) {
+                    if (distance <= 4) {
                         std::cout << tileToChar(TileType::Stairs);
-                        stairsRevealed = true;
                     }
-                    else {
-                        std::cout << tileToChar(TileType::Floor);
-                    }
+                }
+                else {
+                    std::cout << tileToChar(TileType::Stairs);
+                    stairsRevealed = true;
                 }
             }
             else
                 std::cout << tileToChar(grid[y][x]);
         }
+
         if (y == 0)
-            std::cout << "   Name: " << playerName;
+            std::cout << "   Name: " << playerName << " | HP: " << playerHP << "/" << playerMaxHP;
         else if (y == 1)
             std::cout << "   Level: " << levelNumber;
 
@@ -65,6 +65,7 @@ bool Map::isWalkable(int x, int y) const {
 }
 
 Position Map::generateLevel() {
+    stairsRevealed = false;
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     for (int y = 0; y < HEIGHT; ++y)

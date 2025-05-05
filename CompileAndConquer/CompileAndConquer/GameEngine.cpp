@@ -28,6 +28,8 @@ char GameEngine::promptNewGameOption() {
     char choice;
     do {
         std::cin >> choice;
+        // Flush the input buffer after reading the choice to clear any leftover newline
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     } while (tolower(choice) != 'n');
 
     return choice;
@@ -40,6 +42,8 @@ void GameEngine::clearScreen() {
 
 void GameEngine::startNewGame() {
     playerName = promptPlayerName();
+    playerHP = 50;
+    playerMaxHP = 50;
     std::cout << "Game starting...\n";
     Position start = map.generateLevel();
     playerX = start.x;
@@ -66,7 +70,7 @@ void GameEngine::run() {
 void GameEngine::render() {
     system("cls"); // Windows: clear the screen
     // system("clear"); // Mac/Linux: clear the screen
-    map.render(playerX, playerY, playerName, level);
+    map.render(playerX, playerY, playerName, level, playerHP, playerMaxHP);
 }
 
 void GameEngine::processInput() {

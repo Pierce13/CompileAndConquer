@@ -16,12 +16,13 @@ public:
     int stairsY = -1;
 
     Map();
-    void render(int playerX, int playerY, const std::string& playerName, int levelNumber) const;
+    void render(int playerX, int playerY, const std::string& playerName, int levelNumber, int playerHP, int playerMaxHP);
     bool isWalkable(int x, int y) const;
     Position generateLevel();
     void resetLevel();
 
 private:
     TileType grid[HEIGHT][WIDTH];
+    bool stairsRevealed;
 };
 

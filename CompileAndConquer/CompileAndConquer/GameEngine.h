@@ -18,6 +18,8 @@ private:
     int playerY;
     int level;
     std::string playerName;
+    int playerHP;
+    int playerMaxHP;
 
 
     void render();
